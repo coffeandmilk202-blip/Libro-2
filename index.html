@@ -18,26 +18,26 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden; /* Sin scrollbars externas */
+      overflow: hidden; /* Elimina cualquier barra de desplazamiento exterior */
       font-family: 'Lora', serif;
   }
 
-  /* Sombra de viñeta para darle atmósfera romántica */
+  /* Sombra de viñeta para la atmósfera */
   body::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.85) 100%);
       z-index: 0;
       pointer-events: none;
   }
 
   .book-container {
       width: 90vw;
-      max-width: 1000px;
+      max-width: 900px;
       height: 80vh;
-      max-height: 650px;
-      perspective: 2000px;
+      max-height: 600px;
+      perspective: 2500px; /* Profundidad del 3D */
       position: relative;
       z-index: 10;
   }
@@ -47,12 +47,12 @@
       height: 100%;
       position: absolute;
       transform-style: preserve-3d;
-      transition: transform 1s ease-in-out;
-      /* Al inicio, el libro está cerrado y centrado (desplazado a la derecha) */
-      transform: translateX(25%); 
+      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+      /* Centra perfectamente el libro cuando está cerrado */
+      transform: translateX(-25%); 
   }
 
-  /* Cuando se abre, se centra para mostrar las dos páginas */
+  /* Cuando se abre, se centra para mostrar las dos páginas completas */
   .book.open {
       transform: translateX(0);
   }
@@ -62,17 +62,15 @@
       width: 50%;
       height: 100%;
       right: 0;
-      transform-origin: left center;
-      transition: transform 1s ease-in-out, box-shadow 1s ease-in-out;
+      transform-origin: left center; /* Las hojas giran desde el lomo izquierdo */
+      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-style: preserve-3d;
-      box-shadow: 5px 10px 20px rgba(0,0,0,0.5);
-      border-radius: 4px 15px 15px 4px;
-      cursor: pointer; /* Indica que se puede hacer clic */
+      border-radius: 3px 12px 12px 3px;
+      cursor: pointer;
   }
 
   .leaf.flipped {
       transform: rotateY(-180deg);
-      box-shadow: -5px 10px 20px rgba(0,0,0,0.5);
   }
 
   .page {
@@ -80,72 +78,57 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      background-color: #f4ebd8; /* Color de hoja antigua */
-      /* Opcional: PON AQUÍ TU IMAGEN DE TEXTURA DE PAPEL */
-      /* background-image: url('ENLACE_TEXTURA.jpg'); */
-      background-size: cover;
-      padding: 40px 50px;
+      background-color: #f4ebd8; /* Color de hoja por si no hay textura */
+      /* Opcional: background-image: url('TU_TEXTURA.jpg'); */
+      padding: 35px 40px 60px 40px; /* 60px abajo para el número y margen limpio */
       color: #2b2620;
-      overflow: hidden; /* NO SCROLL - el texto se auto divide */
   }
 
+  /* Sombreados en los lomos internos para dar volumen */
   .page-front {
-      border-radius: 4px 15px 15px 4px;
-      box-shadow: inset -15px 0 20px rgba(0,0,0,0.05); /* Sombra del centro (lomo) */
+      border-radius: 3px 12px 12px 3px;
+      box-shadow: inset 15px 0 20px -10px rgba(0,0,0,0.2), 3px 5px 15px rgba(0,0,0,0.3);
   }
 
   .page-back {
-      border-radius: 15px 4px 4px 15px;
+      border-radius: 12px 3px 3px 12px;
       transform: rotateY(180deg);
-      box-shadow: inset 15px 0 20px rgba(0,0,0,0.05); /* Sombra del centro (lomo) */
+      box-shadow: inset -15px 0 20px -10px rgba(0,0,0,0.2), -3px 5px 15px rgba(0,0,0,0.3);
   }
 
+  /* PORTADA DE IMAGEN PURA */
   .cover-front {
       /* PON AQUÍ TU IMAGEN DE PORTADA */
       background: url('portada.jpg') center center/cover no-repeat #3e1b1b;
-      color: #e0ca9e;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      border-left: 12px solid #111; /* Lomo del libro duro */
-  }
-
-  .cover-front::after {
-      content: '';
-      position: absolute;
-      top:0; left:0; right:0; bottom:0;
-      background: rgba(0,0,0,0.4);
-      z-index: -1;
-  }
-
-  .cover-content {
-      z-index: 2;
-  }
-
-  .cover-title { 
-      font-family: 'Playfair Display', serif; 
-      font-size: 2.5rem; 
-      text-shadow: 2px 2px 5px #000;
-      margin-bottom: 10px;
+      justify-content: flex-end; /* Manda el texto abajo */
+      padding-bottom: 40px;
+      border-left: 15px solid #0f0a08; /* Lomo rústico */
   }
 
   .cover-hint {
       animation: pulse 2s infinite;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
       padding: 10px 20px;
       border-radius: 20px;
       font-size: 0.9rem;
-      margin-top: 30px;
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(3px);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
   }
 
   @keyframes pulse { 
-      0% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(255,255,255,0.2); } 
-      50% { opacity: 1; box-shadow: 0 0 0 10px rgba(255,255,255,0); } 
-      100% { opacity: 0.6; box-shadow: 0 0 0 0 rgba(255,255,255,0); } 
+      0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); } 
+      50% { box-shadow: 0 0 0 10px rgba(255,255,255,0); } 
+      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } 
+  }
+
+  .page-content {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* CERO BARRAS DE SCROLL */
   }
 
   /* Text formatting */
@@ -153,15 +136,25 @@
       font-family: 'Playfair Display', serif;
       color: #5c1a1b;
       text-align: center;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       margin-top: 0;
       border-bottom: 1px solid rgba(179, 139, 77, 0.4);
       padding-bottom: 10px;
+      margin-bottom: 15px;
   }
   
+  h3 {
+      font-family: 'Playfair Display', serif;
+      color: #b38b4d;
+      text-align: center;
+      font-style: italic;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+  }
+
   p {
       line-height: 1.7;
-      font-size: 1.1rem;
+      font-size: 1rem;
       margin-bottom: 12px;
       text-align: justify;
   }
@@ -183,63 +176,64 @@
       font-size: 0.9rem;
   }
 
-  /* Contenedor invisible que mide dónde cortar el texto automáticamente */
+  /* Caja matemática oculta para cortar el texto */
   #measure-box {
       position: absolute;
-      visibility: hidden;
+      top: 0; left: 0;
       width: 50%;
       height: 100%;
-      padding: 40px 50px 60px 50px; /* Igual que la hoja pero con más espacio abajo para el numero */
-      z-index: -100;
-      pointer-events: none;
+      padding: 35px 40px 60px 40px; 
+      visibility: hidden;
+      z-index: -1000;
   }
 
-  /* Indicadores visuales de clic */
+  /* Indicadores laterales de clic */
   .click-guide {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
       font-size: 2rem;
-      color: rgba(0,0,0,0.1);
+      color: rgba(255,255,255,0.2);
       pointer-events: none;
       transition: color 0.3s;
       z-index: 1000;
   }
-  .click-guide.left { left: 20px; display: none; }
-  .click-guide.right { right: 20px; }
+  .click-guide.left { left: 10px; display: none; }
+  .click-guide.right { right: 10px; display: none; }
   
-  .book-container:hover .click-guide { color: rgba(0,0,0,0.4); }
+  .book-container:hover .click-guide { color: rgba(255,255,255,0.6); }
 
-  @media (max-width: 800px) {
-      .book-container { width: 95vw; height: 90vh; }
-      .page { padding: 30px 25px; }
-      #measure-box { padding: 30px 25px 50px 25px; }
-      p { font-size: 0.95rem; }
-      h2 { font-size: 1.5rem; }
-      .cover-title { font-size: 1.8rem; }
+  @media (max-width: 768px) {
+      .book-container { width: 95vw; height: 85vh; }
+      .page, #measure-box { padding: 25px 25px 50px 25px; }
+      p { font-size: 0.9rem; line-height: 1.5; }
+      h2 { font-size: 1.4rem; }
+      h3 { font-size: 1rem; margin-bottom: 15px; }
+      .click-guide { display: none !important; }
   }
 </style>
 </head>
 <body>
 
-<!-- REPRODUCTOR DE AUDIO OCULTO -->
+<!-- REPRODUCTOR AUTOMÁTICO -->
 <audio id="musica" loop>
     <!-- PON AQUÍ TU CANCIÓN -->
-    <source src="ENLACE_AUDIO.mp3" type="audio/mpeg">
+    <source src="TU_CANCION.mp3" type="audio/mpeg">
 </audio>
 
-<!-- CAJA DE MEDICIÓN INVISIBLE PARA DIVIDIR LAS HOJAS -->
-<div id="measure-box"></div>
+<!-- CALCULADORA DE ESPACIO DE TEXTO -->
+<div id="measure-box"><div id="measure-inner" style="height: 100%;"></div></div>
 
 <div class="book-container">
     <div class="click-guide left" id="guide-left">&#10094;</div>
     <div class="click-guide right" id="guide-right">&#10095;</div>
     <div class="book" id="book">
-        <!-- El JS inyectará las hojas aquí -->
+        <!-- El Motor 3D inyecta el libro aquí -->
     </div>
 </div>
 
 <script>
+// TEXTO BRUTO DEL LIBRO
 const rawText = `Capítulo I
 El lugar donde nació la pregunta
 En el pueblo donde vivía el joven, todos parecían saber qué era el amor.
@@ -993,7 +987,7 @@ Recordamos momentos.
 Nadie ama un calendario.
 Amamos aquella conversación que nos cambió la vida.
 La caminata que no queríamos que terminara.
-La despedida que hubiéramos querido retrasar unos minutos más.
+La despedida que hubramos querido retrasar unos minutos más.
 Porque el corazón no sabe contar horas.
 Solo sabe guardar aquello que fue verdadero.
 El joven bajó la mirada hacia su cuaderno.
@@ -2443,28 +2437,30 @@ palabras, pero el corazón siempre conserva aquello que lo cambió para siempre.
 
     document.addEventListener("DOMContentLoaded", () => {
         const measureBox = document.getElementById('measure-box');
+        const measureInner = document.getElementById('measure-inner');
         const book = document.getElementById('book');
         const paragraphs = rawText.split('\n').filter(p => p.trim() !== '');
         
         let pagesContent = [];
         let currentContent = document.createElement('div');
-        measureBox.appendChild(currentContent);
+        currentContent.className = 'page-content';
+        measureInner.appendChild(currentContent);
         
-        // Función para "guardar" la hoja que acabamos de llenar
+        // Empaquetador de páginas
         function pushPage() {
             pagesContent.push(currentContent.innerHTML);
+            measureInner.innerHTML = '';
             currentContent = document.createElement('div');
-            measureBox.innerHTML = '';
-            measureBox.appendChild(currentContent);
+            currentContent.className = 'page-content';
+            measureInner.appendChild(currentContent);
         }
 
         paragraphs.forEach(p => {
             let el;
             
-            // Detectar capítulos o dedicatoria
             if (p.startsWith('Capítulo') || p.startsWith('Para Angel')) {
-                // Siempre forzamos que un capítulo nuevo empiece en hoja nueva
-                if(currentContent.innerHTML.trim() !== '') {
+                // Forzar página nueva en cada capítulo o dedicatoria
+                if(currentContent.childNodes.length > 0) {
                     pushPage();
                 }
                 el = document.createElement('h2');
@@ -2476,10 +2472,9 @@ palabras, pero el corazón siempre conserva aquello que lo cambió para siempre.
                 el.innerText = p;
             } 
             else {
-                // Truco para identificar el subtítulo (el texto debajo de "Capítulo I")
+                // Subtítulo si es el primer párrafo después del título
                 if (currentContent.childNodes.length === 1 && currentContent.firstChild.tagName === 'H2') {
                     el = document.createElement('h3');
-                    el.className = 'chapter-subtitle';
                     el.innerText = p;
                 } else {
                     el = document.createElement('p');
@@ -2489,62 +2484,67 @@ palabras, pero el corazón siempre conserva aquello que lo cambió para siempre.
             
             currentContent.appendChild(el);
             
-            // Si el texto agregado hace que la caja se desborde, lo pasamos a la siguiente hoja
-            if (currentContent.scrollHeight > measureBox.clientHeight) {
+            // Corte perfecto de página (si se desborda, lo pasamos a la siguiente)
+            if (currentContent.childNodes.length > 1 && currentContent.scrollHeight > currentContent.clientHeight) {
                 currentContent.removeChild(el); 
                 pushPage(); 
                 currentContent.appendChild(el); 
             }
         });
         
-        // Guardar la última hoja si tiene algo
-        if (currentContent.innerHTML.trim() !== '') {
+        // Guardar última página
+        if (currentContent.childNodes.length > 0) {
             pushPage();
         }
         
-        // CONSTRUIR EL HTML DEL LIBRO (Las Hojas 3D)
+        // -----------------------------------------------------
+        // CONSTRUCCIÓN DEL LIBRO EN 3D
+        // -----------------------------------------------------
         let html = '';
         
-        // HOJA 0: Es la portada
+        // HOJA 0 (Portada y contra-portada interior)
         html += `
         <div class="leaf" style="z-index: 100;">
             <div class="page page-front cover-front">
-                <div class="cover-content">
-                    <h1 class="cover-title">El lugar donde<br>nació la pregunta</h1>
-                    <div class="cover-hint">Haz clic en el libro para abrirlo</div>
-                </div>
+                <div class="cover-hint">Toca para abrir</div>
             </div>
             <div class="page page-back">
-                <div class="page-content">
-                    ${pagesContent[0] || ''}
-                </div>
+                <div class="page-content">${pagesContent[0] || ''}</div>
                 <div class="page-number">1</div>
             </div>
         </div>`;
         
-        // Resto de las hojas emparejadas (delante y detrás)
+        // HOJAS DE CONTENIDO
         let z = 99;
         for (let i = 1; i < pagesContent.length; i += 2) {
+            let frontContent = pagesContent[i] || '';
+            let backContent = pagesContent[i+1] || '';
+            
             html += `
             <div class="leaf" style="z-index: ${z--};">
                 <div class="page page-front">
-                    <div class="page-content">
-                        ${pagesContent[i] || ''}
-                    </div>
-                    <div class="page-number">${i+1}</div>
+                    <div class="page-content">${frontContent}</div>
+                    ${frontContent ? `<div class="page-number">${i+1}</div>` : ''}
                 </div>
                 <div class="page page-back">
-                    <div class="page-content">
-                        ${pagesContent[i+1] || ''}
-                    </div>
-                    <div class="page-number">${i+2}</div>
+                    <div class="page-content">${backContent}</div>
+                    ${backContent ? `<div class="page-number">${i+2}</div>` : ''}
                 </div>
             </div>`;
         }
+
+        // HOJA FINAL (Contratapa rígida)
+        html += `
+        <div class="leaf" style="z-index: ${z--};">
+            <div class="page page-front"></div>
+            <div class="page page-back cover-back" style="background-color: #0f0a08; border-right: 15px solid #050302;"></div>
+        </div>`;
         
         book.innerHTML = html;
         
-        // INTERACCIÓN DE GIRO Y MÚSICA
+        // -----------------------------------------------------
+        // LÓGICA DE INTERACCIÓN Y CAPAS (Z-INDEX)
+        // -----------------------------------------------------
         const leaves = document.querySelectorAll('.leaf');
         let currentLeaf = 0;
         let audioPlayed = false;
@@ -2554,7 +2554,7 @@ palabras, pero el corazón siempre conserva aquello que lo cambió para siempre.
 
         function updateGuides() {
             btnLeft.style.display = currentLeaf > 0 ? 'block' : 'none';
-            btnRight.style.display = currentLeaf < leaves.length ? 'block' : 'none';
+            btnRight.style.display = currentLeaf < leaves.length - 1 ? 'block' : 'none';
         }
         updateGuides();
 
@@ -2562,33 +2562,34 @@ palabras, pero el corazón siempre conserva aquello que lo cambió para siempre.
             const rect = book.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             
-            // Si hacemos clic en la mitad derecha (Avanzar Página)
+            // Clic en la mitad Derecha (Avanzar)
             if (clickX > rect.width / 2) {
-                if (currentLeaf < leaves.length) {
+                // Impide pasar la contratapa
+                if (currentLeaf < leaves.length - 1) {
                     if (currentLeaf === 0) {
-                        book.classList.add('open'); // Centra el libro en la pantalla
+                        book.classList.add('open'); 
                         if (!audioPlayed) {
                             const audio = document.getElementById('musica');
-                            audio.play().catch(err => console.log("Bloqueo de audio por el navegador."));
+                            audio.play().catch(err => console.log("Bloqueo de navegador."));
                             audioPlayed = true;
                         }
                     }
                     leaves[currentLeaf].classList.add('flipped');
-                    // Cambiamos el z-index para que la hoja caiga encima correctamente en el lado izquierdo
+                    // Corrección del z-index para que se apilen bien al lado izquierdo
                     leaves[currentLeaf].style.zIndex = currentLeaf + 1; 
                     currentLeaf++;
                 }
             } 
-            // Si hacemos clic en la mitad izquierda (Retroceder Página)
+            // Clic en la mitad Izquierda (Retroceder)
             else {
                 if (currentLeaf > 0) {
                     currentLeaf--;
                     leaves[currentLeaf].classList.remove('flipped');
-                    // Restauramos el z-index original para el lado derecho
-                    leaves[currentLeaf].style.zIndex = leaves.length - currentLeaf; 
+                    // Corrección del z-index para que se apilen bien al lado derecho
+                    leaves[currentLeaf].style.zIndex = 100 - currentLeaf; 
                     
                     if (currentLeaf === 0) {
-                        book.classList.remove('open'); // Vuelve a la posición de libro cerrado
+                        book.classList.remove('open'); 
                     }
                 }
             }
